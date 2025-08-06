@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <nav class="navbar">
+        <h2>LOGO</h2>
+        
+        <div>
+    <p id="usersignupname"></p>
+            <button id="logout">logout</button>
+        </div>
+
+    </nav>
+
+    <div class="post-container">
+    <form action="" id="postform" >
+        <!-- <input type="text" id="postname" placeholder="Enter your name" class="input-field"> -->
+        <input type="text" id="Title" placeholder="Title" class="input-field" />
+        <textarea name="Discription" id="discription" placeholder="Write description..." class="textarea-field"></textarea>
+        <button type="submit" class="submit-btn">Create</button>
+    </form>
+
+    <div id="postsshow" class="posts-container">
+        <!-- Posts will be shown here -->
+    </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
