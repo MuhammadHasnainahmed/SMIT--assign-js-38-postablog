@@ -52,7 +52,11 @@ if (signupForm) {
     } else {
       // console.log(data);
       console.log(data);
-      window.location.href = "login.html";
+      toastr.success('Message sent successfully!');
+      setTimeout(() => {
+        
+        window.location.href = "login.html";
+      }, 1000);
 
     }
 
@@ -76,12 +80,16 @@ if (loginForm) {
       console.log(error);
     } else {
       console.log(data);
+      toastr.success('Message sent successfully!');
+
             
       const user = data.user;
       localStorage.setItem("username", user.user_metadata.username);
       localStorage.setItem("userid", user.id);
-      
-      window.location.href = "dashboard.html";
+       setTimeout(() => {
+        
+         window.location.href = "dashboard.html";
+       }, 1000);
     }
 });
 }
@@ -114,6 +122,8 @@ if (logout) {
       console.log(error);
     } else {
         localStorage.clear();
+      toastr.success('Message sent successfully!');
+
       setTimeout(() => {
         window.location.href = "index.html";
       }, 500);
@@ -140,6 +150,8 @@ if (postform) {
       console.log(error);
     } else{
         console.log("post added" , data);
+      toastr.success('Message sent successfully!');
+
         showpost();
         
         
