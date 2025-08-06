@@ -52,6 +52,7 @@ if (signupForm) {
     } else {
       // console.log(data);
       console.log(data);
+      window.location.href = "login.html";
 
     }
 
