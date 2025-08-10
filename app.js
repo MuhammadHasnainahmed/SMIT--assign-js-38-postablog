@@ -23,8 +23,13 @@ let Title = document.getElementById("Title");
 let postdiscription = document.getElementById("discription");
 let postsshow = document.getElementById("postsshow");
 let postname = document.getElementById("postname");
+let postimg = document.getElementById("postimg");
 
 let allpostsshow = document.getElementById("allpostsshow");
+let authoravatar = document.querySelector('.author-avatar')
+
+
+
 
 if (signupForm) {
   signupForm.addEventListener("submit", async function (e) {
@@ -139,13 +144,39 @@ if (postform) {
     let discription = postdiscription.value;
     let username = localStorage.getItem('username')
     let unid = localStorage.getItem('userid')
+    let file = postimg.files[0];
+    let filename =Date.now() + "-" + file.name;
+    // console.log(file);
+    console.log(filename);
+    
+const { data: postimgdata, error: postimgerror } = await client
+  .storage
+  .from('postimg')
+  .upload(`publice/${filename}`, file, {
+    cacheControl: '3600',
+    upsert: false
+  });
 
-    console.log(title, discription  ,username , unid);
+if (postimgerror) {
+  console.log("post error=====>", postimgerror);
+} else {
+  console.log("post add=====>", postimgdata);
+}
+
+const { data: publicUrlData } = client
+  .storage
+  .from('postimg')
+  .getPublicUrl(`publice/${filename}`);
+let imageurl = publicUrlData.publicUrl;
+
+
+
+  
 
 
     const { data,  error } = await client
       .from("post")
-      .insert({ title, discription , username , unid });
+      .insert({ title, discription , username , unid , imageurl });
     if (error) {
       console.log(error);
     } else{
@@ -156,6 +187,10 @@ if (postform) {
         
         
     }
+
+  
+  
+    
 
     Title.value = "";
     postdiscription.value = "";
@@ -177,7 +212,7 @@ if (postform) {
     const { data, error } = await client
   .from('post')
   .select('*')
-  .eq('unid', userid  );
+  .eq('unid', userid   );
 
 
   
@@ -188,13 +223,27 @@ if (postform) {
 } else {
     console.log(data);
     postsshow.innerHTML = "";
+
+    
+
+    
     for (let i = 0; i < data.length; i++) {
+let postimageurl = data[i].imageurl;
         postsshow.innerHTML += `
-        <div class="post">
-        <h2>${data[i].title}</h2>
-        <p>${data[i].discription}</p>
-        <p>${usernamelogin}</p>
-        </div>
+         <div class="post">
+                    <img src="${postimageurl}" alt="Mountain landscape" class="post-image">
+                    <div class="post-content">
+                        <h3 class="post-title">${data[i].title}</h3>
+                        <p class="post-description">${data[i].discription}.</p>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-date">Jun 15, 2023</div>
+                        <div class="post-author">
+                            <div class="author-avatar">${data[i].username.charAt(0).toUpperCase()}</div>
+                            <span>${data[i].username} </span>
+                        </div>
+                    </div>
+                </div>
       `        
     }
     
@@ -209,6 +258,7 @@ showpost();
 
 if (allpostsshow) {
     async function showallpost() {
+      
         const { data, error } = await client
   .from('post')
   .select();
@@ -221,12 +271,22 @@ if (allpostsshow) {
    }else{
        allpostsshow.innerHTML = "";
        for (let i = 0; i < data.length; i++) {
+        let postimageurl = data[i].imageurl;
            allpostsshow.innerHTML += `
-           <div class="post">
-           <h2>${data[i].title}</h2>
-           <p>${data[i].discription}</p>
-           <p>${data[i].username}</p>
-           </div>
+          <div class="post">
+                    <img src="${postimageurl}" alt="Mountain landscape" class="post-image">
+                    <div class="post-content">
+                        <h3 class="post-title">${data[i].title}</h3>
+                        <p class="post-description">${data[i].discription}.</p>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-date">Jun 15, 2023</div>
+                        <div class="post-author">
+                            <div class="author-avatar">${data[i].username.charAt(0).toUpperCase()}</div>
+                            <span>${data[i].username} </span>
+                        </div>
+                    </div>
+                </div>
          `        
        }
    }

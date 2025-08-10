@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-     <nav class="navbar">
-        <h2>LOGO</h2>
-        
-        <div>
-    <p id="usersignupname"></p>
-            <button id="logout">logout</button>
-        </div>
 
-    </nav>
-
-    <div class="post-container">
-    <form action="" id="postform" >
-        <!-- <input type="text" id="postname" placeholder="Enter your name" class="input-field"> -->
-        <input type="text" id="Title" placeholder="Title" class="input-field" />
-        <textarea name="Discription" id="discription" placeholder="Write description..." class="textarea-field"></textarea>
-        <button type="submit" class="submit-btn">Create</button>
-    </form>
-
-    <div id="postsshow" class="posts-container">
-        <!-- Posts will be shown here -->
+<nav class="navbar">
+    <h2>LOGO</h2>
+    <div class="user-info">
+        <p id="usersignupname">Username</p>
+        <button id="logout">Logout</button>
     </div>
-</div>
+</nav>
 
+<main class="container">
+    <section class="form-section">
+        <form id="postform">
+            <!-- <h2 >Recent Posts</h2> -->
+            <input type="text" id="Title" placeholder="Title" class="input-field">
+            <textarea id="discription" placeholder="Write description..." class="textarea-field"></textarea>
+            <input type="file" id="postimg">
+            <button type="submit" class="submit-btn">Create</button>
+        </form>
+    </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="app.js"></script>
+    <section class="posts-section" id="postsshow">
+        <!-- Example Post -->
+        
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
 </body>
 </html>
