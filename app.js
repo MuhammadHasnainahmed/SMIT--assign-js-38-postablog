@@ -27,6 +27,9 @@ let postimg = document.getElementById("postimg");
 
 let allpostsshow = document.getElementById("allpostsshow");
 let authoravatar = document.querySelector('.author-avatar')
+let deletebtn = document.getElementById("deletebtn");
+let editbtn = document.getElementById('editbtn')
+let sideSaveBtn = document.getElementById("sideSaveBtn");
 
 
 
@@ -230,7 +233,12 @@ let imageurl = publicUrlData.publicUrl;
     for (let i = 0; i < data.length; i++) {
 let postimageurl = data[i].imageurl;
         postsshow.innerHTML += `
-         <div class="post">
+         <div class="post"
+         data-id="${data[i].id}"
+          data-title="${data[i].title}"
+          data-discription="${data[i].discription}"
+          data-imageurl="${postimageurl}"
+          >
                     <img src="${postimageurl}" alt="Mountain landscape" class="post-image">
                     <div class="post-content">
                         <h3 class="post-title">${data[i].title}</h3>
@@ -256,6 +264,162 @@ let postimageurl = data[i].imageurl;
 // }
 showpost();
 
+// ===============popup================================
+let storedata = null;
+
+document.addEventListener('click' , function(e){
+  let post  = e.target.closest('.post');
+  // console.log(storedata);
+
+  if (post) {
+    storedata = post.dataset.id;
+    let Title = post.dataset.title;       
+    let discription = post.dataset.discription;
+    let imageurl = post.dataset.imageurl;
+
+    document.getElementById("popupimage").src = imageurl; 
+    document.getElementById("popuptitle").innerHTML = Title;
+    document.getElementById("popupdiscription").innerHTML = discription;
+    document.getElementById("popupoverlay").style.display = 'flex';
+  }
+
+  if (e.target === document.getElementById("popupoverlay")) {
+    document.getElementById("popupoverlay").style.display = 'none';
+    
+  }
+
+  
+});
+
+// ==================deletebtn=============================
+
+if (deletebtn) {
+  deletebtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+  //  console.log("delete");
+ 
+   const { error } = await client
+    .from('post')
+    .delete()
+    .eq('id', storedata); 
+
+
+     if (error) {
+    console.log(error);
+    toastr.error("Delete failed!");
+  } else {
+    toastr.success("Post deleted!");
+    document.getElementById("popupoverlay").style.display = 'none';
+    showpost(); 
+  }
+  //  const userid 
+
+  });
+  }
+
+
+  // ==================editbtn=========================
+let title = ''
+let discription = ''
+// let imageurl = ''
+ if (editbtn) {
+ editbtn.addEventListener('click', async function (e) {
+    e.preventDefault();
+
+    // console.log("update");
+
+    document.getElementById("sidepanaloverlay").style.display = 'block';
+
+    
+   title = document.getElementById("popuptitle").innerHTML;
+   discription = document.getElementById("popupdiscription").innerHTML;
+
+   document.getElementById("sideTitle").value = title;
+   document.getElementById("sideDiscription").value = discription;
+
+   
+
+
+
+ })
+}
+
+document.addEventListener('click' , function(e){
+      if (e.target === document.getElementById("sidepanaloverlay")) {
+      document.getElementById("sidepanaloverlay").style.display = 'none';
+      
+    }
+})
+
+
+
+if (sideSaveBtn) {
+  
+sideSaveBtn.addEventListener('click', async function (e) {
+  e.preventDefault();
+  // console.log("save");
+  
+
+
+   
+  let sideTitle = document.getElementById("sideTitle").value;
+  let sideDiscription = document.getElementById("sideDiscription").value;
+  let sideImageurl = document.getElementById("sidePostimg");
+
+     let file = sideImageurl.files[0];
+    let filename =Date.now() + "-" + file.name;
+
+  
+
+  // console.log(filename);
+
+const { data, error: uploadupdateError } = await client
+  .storage
+   .from('postimg')
+  .upload(`publice/${filename}`, file, {
+    cacheControl: '3600',
+    upsert: false
+  });
+
+  if (uploadupdateError) {
+    console.log(uploadupdateError);
+    return;
+  }
+
+  // Public URL lena
+const { data: urlData } = client
+  .storage
+  .from('postimg')
+  .getPublicUrl(`publice/${filename}`);
+
+let publicUrl = urlData.publicUrl;
+  
+
+
+
+
+  const { error } = await client
+  .from('post')
+  .update({title: sideTitle , discription: sideDiscription , imageurl: publicUrl})
+  .eq('id', storedata); 
+
+  if (error) {
+    console.log(error);
+    toastr.error("Update failed!");
+  } else {
+    toastr.success("Post updated!");
+    document.getElementById("sidepanaloverlay").style.display = 'none';
+    document.getElementById("popupoverlay").style.display = 'none';
+    showpost(); 
+  }
+
+})
+}
+
+
+
+// ================================================
+
 if (allpostsshow) {
     async function showallpost() {
       
@@ -273,7 +437,7 @@ if (allpostsshow) {
        for (let i = 0; i < data.length; i++) {
         let postimageurl = data[i].imageurl;
            allpostsshow.innerHTML += `
-          <div class="post">
+          <div class="post" >
                     <img src="${postimageurl}" alt="Mountain landscape" class="post-image">
                     <div class="post-content">
                         <h3 class="post-title">${data[i].title}</h3>
@@ -305,9 +469,6 @@ async function redirect() {
     if (window.location.pathname.includes("dashboard.html")) {
       window.location.href = "index.html";
     }
-  }else{
-    console.log(error);
-    
   }
 }
 redirect();

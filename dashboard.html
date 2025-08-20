@@ -35,6 +35,29 @@
         <!-- Example Post -->
         
     </section>
+
+     <div id="popupoverlay" class="overlay">
+    <div class="popup">
+      <!-- <a id="closepopup" class="close" href="#">&times;</a> -->
+      <img id="popupimage" src="" alt="Image">
+      <h2 id="popuptitle">Popup Title</h2>
+      <p id="popupdiscription" >This is a simple popup description.</p>
+      <button id="editbtn">Edit</button>
+      <button id="deletebtn">Delete</button>
+    </div>
+  </div>
+<!-- <div id="popupoverlay"></div> -->
+<div id="sidepanaloverlay">
+    <div id="sidePanel" class="side-panel">
+        <h3>Edit Post</h3>
+        <input type="text" id="sideTitle" placeholder="Title" class="input-field">
+        <textarea id="sideDiscription" placeholder="Write description..." class="textarea-field"></textarea>
+        <input type="file" id="sidePostimg">
+        
+        <button id="sideSaveBtn">Save</button>
+    </div>
+</div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
